@@ -1,0 +1,14 @@
+{
+  "name": "backlog-refinery",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Work through a GitHub Projects v2 triage column one item at a time, with agent-drafted refinements you edit before anything is applied.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "init": "node scripts/init.mjs",
+    "demo": "REFINERY_DEMO=1 node server.mjs",
+    "test": "node --test"
+  },
+  "engines": { "node": ">=20" }
+}

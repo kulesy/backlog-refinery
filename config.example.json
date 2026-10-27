@@ -1,0 +1,61 @@
+{
+  "owner": "tinacms",
+  "projectNumber": 38,
+  "projectId": "PVT_xxxxxxxx",
+  "boardName": "TinaCloud board 38",
+  "triageStatus": "\ud83e\udd37\u200d\u2642\ufe0f Needs Triage",
+  "fields": {
+    "status": "PVTSSF_xxxxxxxx",
+    "estimate": "PVTF_xxxxxxxx",
+    "score": "PVTF_xxxxxxxx",
+    "priority": "PVTSSF_xxxxxxxx"
+  },
+  "statusOptions": {
+    "needsTriage": "xxxxxxxx",
+    "notReady": "xxxxxxxx",
+    "ready": "xxxxxxxx",
+    "done": "xxxxxxxx",
+    "wontDo": "xxxxxxxx"
+  },
+  "priorityOptions": {
+    "Urgent": "xxxxxxxx",
+    "High": "xxxxxxxx",
+    "Medium": "xxxxxxxx",
+    "Low": "xxxxxxxx"
+  },
+  "port": 4380,
+  "boardCacheMinutes": 10,
+  "notReadyStatus": "\ud83d\udccb Backlog - Not Ready",
+  "statuses": [
+    "\ud83e\udd37\u200d\u2642\ufe0f Needs Triage",
+    "\ud83d\udccb Backlog - Not Ready",
+    "\ud83d\udd16 Backlog - Ready",
+    "\ud83c\udfd7 In progress"
+  ],
+  "repos": [
+    "tinacloud",
+    "tinacms"
+  ],
+  "privateRepos": [
+    "tinacloud",
+    "tinacloud-cli"
+  ],
+  "repoLabels": {
+    "tinacms": "TinaCMS",
+    "tinacloud": "TinaCloud"
+  },
+  "dor": {
+    "gitmoji": true,
+    "evidence": true
+  },
+  "autoApprove": {
+    "titles": true
+  },
+  "_notes": {
+    "boardName": "Optional. Shown as a tooltip on the board-as-of line. Default: \"<owner> project <projectNumber>\".",
+    "repos": "Optional. Repos to fetch created dates for. Default: the repos seen on the board.",
+    "privateRepos": "Optional. Exact repo names that are private. Hidden by name in the stage view (?stage). Default: none.",
+    "repoLabels": "Optional. Repo name to the label on its crest cards. Default: the repo name.",
+    "stage": "Optional. { repos, hideLabels, ids } for the stage view. repos defaults to every repo that is not in privateRepos."
+  }
+}

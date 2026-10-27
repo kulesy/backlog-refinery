@@ -1,0 +1,155 @@
+{
+ "web#101": {
+  "action": "set-estimate",
+  "estimate": 4,
+  "estimate_reason": "One settings control, a stored preference and a second set of colour tokens.",
+  "body": "",
+  "body_summary": "",
+  "title": "",
+  "title_reason": "",
+  "close_target": "",
+  "close_reason": "",
+  "needs_info": [],
+  "confidence": "high",
+  "rationale": "The body already has clear acceptance criteria, so it only needs a size."
+ },
+ "web#102": {
+  "action": "rewrite-and-estimate",
+  "estimate": 2,
+  "estimate_reason": "Likely a re-render keyed on the query, a small fix.",
+  "body": "## Pain\nTyping in the header search drops focus after one character, so people have to click back in for every letter.\n\n## Approach\nKeep the input mounted while results update.\n\n## Acceptance Criteria\n- Typing a full word in the header search keeps focus\n- The same holds on the mobile layout\n- A regression test covers the behaviour",
+  "body_summary": "Adds steps and acceptance criteria.",
+  "title": "Fix the header search losing focus after one keystroke",
+  "title_reason": "Names the symptom and the place.",
+  "close_target": "",
+  "close_reason": "",
+  "needs_info": [
+   "Which browser versions were affected?",
+   "Does it happen on the mobile layout?"
+  ],
+  "confidence": "medium",
+  "rationale": "A real bug, but the body gives no steps to reproduce or definition of done."
+ },
+ "api#103": {
+  "action": "set-estimate",
+  "estimate": 3,
+  "estimate_reason": "Small change in the limiter middleware plus a docs line.",
+  "body": "",
+  "body_summary": "",
+  "title": "",
+  "title_reason": "",
+  "close_target": "",
+  "close_reason": "",
+  "needs_info": [],
+  "confidence": "high",
+  "rationale": "Well specified and small."
+ },
+ "web#104": {
+  "action": "close-superseded",
+  "estimate": 0,
+  "estimate_reason": "",
+  "body": "",
+  "body_summary": "",
+  "title": "",
+  "title_reason": "",
+  "close_target": "web#101",
+  "close_reason": "The settings toggle in web#101 covers this, so this one is a duplicate.",
+  "needs_info": [],
+  "confidence": "high",
+  "rationale": "Same request as web#101 with less detail."
+ },
+ "api#105": {
+  "action": "needs-decision",
+  "estimate": 8,
+  "estimate_reason": "Includes a migration and an ops change.",
+  "body": "",
+  "body_summary": "",
+  "title": "",
+  "title_reason": "",
+  "close_target": "",
+  "close_reason": "",
+  "needs_info": [
+   "What is the target instance count?",
+   "Is a managed Redis available?"
+  ],
+  "confidence": "medium",
+  "rationale": "A product and ops call before any work can be sized.",
+  "recommended_decision": "Yes, use a managed Redis. Keep the in-memory store for local development behind the same interface.",
+  "decision_basis": "Running more than one instance is on the roadmap, and in-memory sessions rule it out."
+ },
+ "web#106": {
+  "action": "split",
+  "estimate": 0,
+  "estimate_reason": "",
+  "body": "",
+  "body_summary": "",
+  "title": "",
+  "title_reason": "",
+  "close_target": "",
+  "close_reason": "",
+  "needs_info": [
+   "Which part hurts most today?"
+  ],
+  "confidence": "medium",
+  "rationale": "Four separate pieces of work, so it needs splitting into one item each before it can be estimated.",
+  "recommended_decision": ""
+ },
+ "api#107": {
+  "action": "rewrite-body",
+  "estimate": 0,
+  "estimate_reason": "",
+  "body": "## Pain\nSubscribers that answer 410 Gone still receive retries for days, which wastes capacity and fills their logs.\n\n## Approach\nTreat 410 as permanent and disable the subscription.\n\n## Acceptance Criteria\n- A 410 response stops further retries\n- The subscription is marked disabled\n- The owner is notified by email",
+  "body_summary": "Adds the approach and acceptance criteria.",
+  "title": "Stop webhook retries after a 410 Gone",
+  "title_reason": "States the expected behaviour.",
+  "close_target": "",
+  "close_reason": "",
+  "needs_info": [
+   "What is the current retry ceiling?"
+  ],
+  "confidence": "high",
+  "rationale": "Clear problem, but the body has no acceptance criteria."
+ },
+ "web#108": {
+  "action": "leave-as-is",
+  "estimate": 1,
+  "estimate_reason": "A one word change.",
+  "body": "",
+  "body_summary": "",
+  "title": "",
+  "title_reason": "",
+  "close_target": "",
+  "close_reason": "",
+  "needs_info": [],
+  "confidence": "high",
+  "rationale": "Already small and specified. Leave it for whoever is next on the site."
+ },
+ "api#109": {
+  "action": "close-not-planned",
+  "estimate": 0,
+  "estimate_reason": "",
+  "body": "",
+  "body_summary": "",
+  "title": "",
+  "title_reason": "",
+  "close_target": "",
+  "close_reason": "Removal is already tracked in the v2 migration plan, so this item adds nothing.",
+  "needs_info": [],
+  "confidence": "medium",
+  "rationale": "Covered by the v2 migration plan."
+ },
+ "web#110": {
+  "action": "set-estimate",
+  "estimate": 5,
+  "estimate_reason": "Needs focus handling in the table plus a help dialog.",
+  "body": "",
+  "body_summary": "",
+  "title": "",
+  "title_reason": "",
+  "close_target": "",
+  "close_reason": "",
+  "needs_info": [],
+  "confidence": "high",
+  "rationale": "Specified and ready to size."
+ }
+}

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="72" viewBox="0 0 420 72" role="img" aria-label="Backlog Refinery">
+  <path d="M20 6l22 8v16c0 15-10 25-22 30C8 55-2 45-2 30V14z" transform="translate(4 2) scale(0.8)" fill="#f1e6cf" stroke="#4a3a2a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M14 22h18M23 22v26" transform="translate(4 2)" stroke="#4a3a2a" stroke-width="5" stroke-linecap="round"/>
+  <text x="56" y="48" font-family="Georgia, 'Times New Roman', serif" font-size="40" font-weight="700" fill="#c9962d">Backlog Refinery</text>
+</svg>

@@ -1,0 +1,185 @@
+{
+ "items": [
+  {
+   "id": "PVTI_demo101",
+   "title": "Add a dark mode toggle to the settings page",
+   "status": "Needs Triage",
+   "labels": [
+    "enhancement"
+   ],
+   "content": {
+    "type": "Issue",
+    "body": "People who work at night ask for a darker theme.\n\n## Acceptance Criteria\n- A toggle in Settings switches between light and dark\n- The choice is remembered after a reload\n- Colour contrast meets WCAG AA in both themes",
+    "number": 101,
+    "repository": "demo-org/web",
+    "title": "Add a dark mode toggle to the settings page",
+    "url": "https://github.com/demo-org/web/issues/101"
+   },
+   "repository": "https://github.com/demo-org/web",
+   "priority": "Medium"
+  },
+  {
+   "id": "PVTI_demo102",
+   "title": "Search box loses focus after the first keystroke",
+   "status": "Needs Triage",
+   "labels": [
+    "bug"
+   ],
+   "content": {
+    "type": "Issue",
+    "body": "Typing in the header search drops focus after one character. Seen in Firefox and Chrome.",
+    "number": 102,
+    "repository": "demo-org/web",
+    "title": "Search box loses focus after the first keystroke",
+    "url": "https://github.com/demo-org/web/issues/102"
+   },
+   "repository": "https://github.com/demo-org/web",
+   "priority": "High"
+  },
+  {
+   "id": "PVTI_demo103",
+   "title": "Rate limit responses need a Retry-After header",
+   "status": "Needs Triage",
+   "labels": [
+    "enhancement"
+   ],
+   "content": {
+    "type": "Issue",
+    "body": "Clients get a 429 with no hint about when to retry, so they hammer the endpoint.\n\n## Acceptance Criteria\n- Every 429 response includes Retry-After in seconds\n- The value matches the limiter window\n- Documented in the API reference",
+    "number": 103,
+    "repository": "demo-org/api",
+    "title": "Rate limit responses need a Retry-After header",
+    "url": "https://github.com/demo-org/api/issues/103"
+   },
+   "repository": "https://github.com/demo-org/api",
+   "estimate": 3,
+   "priority": "Medium"
+  },
+  {
+   "id": "PVTI_demo104",
+   "title": "Dark theme option for the dashboard",
+   "status": "Needs Triage",
+   "labels": [],
+   "content": {
+    "type": "Issue",
+    "body": "Add a dark theme to the dashboard.",
+    "number": 104,
+    "repository": "demo-org/web",
+    "title": "Dark theme option for the dashboard",
+    "url": "https://github.com/demo-org/web/issues/104"
+   },
+   "repository": "https://github.com/demo-org/web"
+  },
+  {
+   "id": "PVTI_demo105",
+   "title": "Move session storage to Redis?",
+   "status": "Needs Triage",
+   "labels": [
+    "question"
+   ],
+   "content": {
+    "type": "Issue",
+    "body": "Sessions live in process memory, which blocks running two instances. Redis would fix that, but it adds a service to run.",
+    "number": 105,
+    "repository": "demo-org/api",
+    "title": "Move session storage to Redis?",
+    "url": "https://github.com/demo-org/api/issues/105"
+   },
+   "repository": "https://github.com/demo-org/api",
+   "priority": "Low"
+  },
+  {
+   "id": "PVTI_demo106",
+   "title": "Redesign the whole onboarding flow",
+   "status": "Needs Triage",
+   "labels": [
+    "enhancement"
+   ],
+   "content": {
+    "type": "Issue",
+    "body": "Onboarding feels dated. Rework the welcome screen, the tour, the sample data and the emails.",
+    "number": 106,
+    "repository": "demo-org/web",
+    "title": "Redesign the whole onboarding flow",
+    "url": "https://github.com/demo-org/web/issues/106"
+   },
+   "repository": "https://github.com/demo-org/web",
+   "priority": "Low"
+  },
+  {
+   "id": "PVTI_demo107",
+   "title": "Webhook delivery retries forever on a 410",
+   "status": "Backlog - Not Ready",
+   "labels": [
+    "bug"
+   ],
+   "content": {
+    "type": "Issue",
+    "body": "When a subscriber answers 410 Gone we keep retrying for days.",
+    "number": 107,
+    "repository": "demo-org/api",
+    "title": "Webhook delivery retries forever on a 410",
+    "url": "https://github.com/demo-org/api/issues/107"
+   },
+   "repository": "https://github.com/demo-org/api",
+   "priority": "High"
+  },
+  {
+   "id": "PVTI_demo108",
+   "title": "Typo in the pricing page footer",
+   "status": "Backlog - Not Ready",
+   "labels": [
+    "bug"
+   ],
+   "content": {
+    "type": "Issue",
+    "body": "The footer says 'recieve'. Fix the spelling.\n\n## Acceptance Criteria\n- The footer reads 'receive'",
+    "number": 108,
+    "repository": "demo-org/web",
+    "title": "Typo in the pricing page footer",
+    "url": "https://github.com/demo-org/web/issues/108"
+   },
+   "repository": "https://github.com/demo-org/web",
+   "estimate": 1,
+   "priority": "Low"
+  },
+  {
+   "id": "PVTI_demo109",
+   "title": "Drop the legacy v1 export endpoint",
+   "status": "Backlog - Not Ready",
+   "labels": [
+    "technical-debt"
+   ],
+   "content": {
+    "type": "Issue",
+    "body": "Nobody has called /v1/export in six months according to the logs.",
+    "number": 109,
+    "repository": "demo-org/api",
+    "title": "Drop the legacy v1 export endpoint",
+    "url": "https://github.com/demo-org/api/issues/109"
+   },
+   "repository": "https://github.com/demo-org/api",
+   "priority": "Low"
+  },
+  {
+   "id": "PVTI_demo110",
+   "title": "Keyboard shortcuts for the table view",
+   "status": "Backlog - Not Ready",
+   "labels": [
+    "enhancement"
+   ],
+   "content": {
+    "type": "Issue",
+    "body": "Power users want j and k to move between rows and enter to open one.\n\n## Acceptance Criteria\n- j and k move the selection\n- Enter opens the selected row\n- The shortcuts are listed in a help dialog",
+    "number": 110,
+    "repository": "demo-org/web",
+    "title": "Keyboard shortcuts for the table view",
+    "url": "https://github.com/demo-org/web/issues/110"
+   },
+   "repository": "https://github.com/demo-org/web",
+   "estimate": 5,
+   "priority": "Medium"
+  }
+ ],
+ "totalCount": 10
+}
