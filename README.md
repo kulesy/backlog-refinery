@@ -20,6 +20,10 @@
 
 </div>
 
+<a href="https://youtu.be/JUKkSp4rvpE"><img alt="Play the Backlog Refinery introduction video on YouTube" src="docs/media/video-poster.png"></a>
+
+Figure: a 1:52 introduction video, from one card and its four checks through End turn to running the demo
+
 <img alt="Backlog Refinery showing a card in the demo, with its three proposed changes beside it and the next cards on the right." src="docs/media/hero.png">
 
 Figure: a card from the demo, with the proposed title, body and effort changes beside it
