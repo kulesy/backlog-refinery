@@ -250,8 +250,8 @@ function uiFor(id) {
     body: d.body ?? (hasDraft ? sug.body : (it.body || '')),
     title: d.title ?? (sug.title || it.title),
     est: 'estimate' in d ? d.estimate : (Number(sug.estimate) > 0 ? Number(sug.estimate) : null),
-    decide: (r.kind === 'decide' && d.note) || sug.recommended_decision || sug.rationale || '',
-    split: (r.kind === 'split' && d.note) || sug.recommended_decision || sug.rationale || '',
+    decide: (r.kind === 'decide' && d.note) || '',
+    split: (r.kind === 'split' && d.note) || '',
     closeReason: d.close_reason ?? (sug.close_reason || ''),
     closeTarget: d.close_target ?? (sug.close_target || ''),
     note: (r.kind !== 'decide' && r.kind !== 'split' && d.note) || '',
@@ -268,6 +268,16 @@ function area(f, v, cls, label, extra = '') {
 const agentText = s => String(s || '').replace(/\bthe deep verification\b/gi, 'the code check').replace(/\bdeep verification\b/gi, 'code check')
   .replace(/\bdeep[- ]verified\b/gi, 'checked against the code');
 
+// An empty box goes with the agent's recommendation; with none to go with, the rationale stands in as before.
+const ownCall = (v, sug) => {
+  const own = String(v || '').trim(), rec = String(sug.recommended_decision || '').trim();
+  if (own && own !== rec) return v;
+  return own || rec ? null : sug.rationale || null;
+};
+const agentCall = (sug, label) => {
+  const rec = sug.recommended_decision || sug.rationale || '';
+  return rec ? `<div class="rec"><span class="lab">${sug.recommended_decision ? label : 'What the code check found'}</span><p>${T(agentText(rec))}</p></div>` : '';
+};
 // The action planFor() reads is derived here at the moment of approval; there is no picker for it.
 function decisionPatch(it, r, u) {
   const sug = it.sug || {};
@@ -292,10 +302,10 @@ function decisionPatch(it, r, u) {
     p.action = 'leave-as-is';
   } else if (r.kind === 'decide') {
     p.action = 'needs-decision';
-    p.note = u.decide.trim() !== (sug.recommended_decision || '').trim() ? u.decide : null;
+    p.note = ownCall(u.decide, sug);
   } else if (r.kind === 'split') {
     p.action = 'split';
-    p.note = u.split.trim() !== (sug.recommended_decision || '').trim() ? u.split : null;
+    p.note = ownCall(u.split, sug);
   } else if (r.kind === 'verify') {
     p.action = 'verify-first';
   } else {
@@ -432,9 +442,8 @@ function face(it, r, now = false) {
 // Now shows only what the board already has: a drafted or waiting check is still missing until Claude acts.
 const nowChecks = r => { const checks = {}; for (const [k, c] of Object.entries(r.checks)) checks[k] = { ...c, state: c.state === 'met' || c.state === 'none' ? c.state : 'missing' };
   return { checks, met: Object.values(checks).filter(c => c.state === 'met').length, closing: false }; };
-// With `was`, a pip that becomes met is marked as a gain and the score shows the move.
-const pips = (r, was) => ['detail', 'value', 'effort', 'approved'].map(k => `<span class="pip ${r.checks[k].state}${was && r.checks[k].state === 'met' && was.checks[k].state !== 'met' ? ' gain' : ''}">${CHECK_NAME[k]}</span>`).join('')
-  + `<b>${r.closing ? 'Closing' : was && was.met !== r.met ? `<s>${was.met}/4</s> ${r.met}/4` : `${r.met}/4`}</b>`;
+const pips = r => ['detail', 'value', 'effort', 'approved'].map(k => `<span class="pip ${r.checks[k].state}">${CHECK_NAME[k]}</span>`).join('')
+  + `<b>${r.closing ? 'Closing' : `${r.met}/4`}</b>`;
 // The card is the main view. Details open the parchment: over the card on a phone, beside it on a wider screen.
 const PHONE = matchMedia('(max-width:760px)');
 const syncView = () => document.body.classList.toggle('cv', PHONE.matches || !document.body.classList.contains('details'));
@@ -620,9 +629,10 @@ function detailRowInner(it, r, u) {
     return row('detail', 'Detail', c, b);
   }
   if (r.kind === 'decide') {
-    const basis = sug.decision_basis && sug.decision_basis.trim() !== (sug.rationale || '').trim() && sug.decision_basis.trim() !== u.decide.trim() ? `<p class="hint">${T(agentText(sug.decision_basis))}</p>` : '';
-    return row('detail', 'Detail', c, `<p>A decision is needed before this can be written up. ${sug.recommended_decision ? 'The agent recommends:' : 'What the code check found:'}</p>
-      ${area('decide', u.decide, 'box', 'Your decision')}${basis}<p class="hint">Approving tells Claude to carry this out. It drafts any posts and shows you them first.</p>`);
+    const basis = sug.decision_basis && sug.decision_basis.trim() !== (sug.rationale || '').trim() && sug.decision_basis.trim() !== (sug.recommended_decision || '').trim() ? `<p class="hint">${T(agentText(sug.decision_basis))}</p>` : '';
+    return row('detail', 'Detail', c, `<p>A decision is needed before this can be written up.</p>${agentCall(sug, 'The agent recommends')}${basis}
+      <label class="yours"><span class="lab">Your decision</span>${area('decide', u.decide, 'box', 'Your decision', `placeholder="Leave empty to go with the agent's recommendation."`)}</label>
+      <p class="hint">Approving tells Claude to carry out your decision, or the agent's if you leave it empty. It drafts any posts and shows you them first.</p>`);
   }
   if (r.kind === 'refine' && !it.ac) return row('detail', 'Detail', c, `<p>No acceptance criteria. With an estimate picked, approving asks Claude to draft them and show you first, then size it.</p>`);
   const read = `<details class="more" style="border:0;padding:0"><summary>Read the issue${it.body ? ` (${(it.body.length / 1000).toFixed(1)}k chars)` : ''}</summary><div class="in">${currentView(it.body)}</div></details>`;
@@ -684,7 +694,8 @@ function effortRow(it, r, u) {
   const reason = agentText(sug.estimate_reason);
   if (c.state === 'none') return row('effort', 'Effort', c, '');
   if (r.decisionOpen && c.state === 'draft' && c.split) {
-    return row('effort', 'Effort', c, `<p>Too big for one card. Split it this way${Number(sug.estimate) > 0 ? `, about ${Number(sug.estimate)} in total` : ''}:</p>${area('split', u.split, 'box', 'How to split it')}`);
+    return row('effort', 'Effort', c, `<p>Too big for one card${Number(sug.estimate) > 0 ? `, about ${Number(sug.estimate)} in total` : ''}.</p>${agentCall(sug, 'The agent would split it')}
+      <label class="yours"><span class="lab">Your split</span>${area('split', u.split, 'box', 'How to split it', `placeholder="Leave empty to go with the agent's split."`)}</label>`);
   }
   if (r.decisionOpen && r.kind === 'refine') {
     const sugEst = Number(sug.estimate) || 0;
@@ -815,8 +826,8 @@ function canApprove(it, r, u) {
 function actBar(it, r, u) {
   const a = r.checks.approved;
   const lab = approveLabel(it, r, u);
-  // Where the card marks its changes the button counts them; elsewhere on a phone it keeps to one word.
-  const marks = !!lab && showsPair(it, r, u), text = approveText(it, r, u);
+  // Where the card marks its changes the list beside it names them; elsewhere on a phone the button keeps to one word.
+  const marks = !!lab && showsPair(it, r, u), text = lab;
   const short = !marks && lab && /^Approve ./.test(lab) && hasChanges(it, r, u);
   const ok = canApprove(it, r, u);
   const d = recsFor(it.id).d || {}, ck = recsFor(it.id).ck || {};
@@ -835,7 +846,7 @@ function actBar(it, r, u) {
       <button class="nav mnav" data-act="next" aria-label="Next" ${nav.pos < total - 1 ? '' : 'disabled'}>&rarr;</button>
       ${canSkip ? `<button class="btn" data-act="skip" aria-pressed="${skipped}">${skipLabel}<span class="kbd">s</span></button>` : ''}
       ${canUndo ? `<button class="btn" data-act="undo" data-id="${esc(it.id)}">Undo approval<span class="kbd">u</span></button>` : ''}
-      <button class="approve${r.pile === 'ready' ? ' done' : ''}${short ? ' sh' : ''}${marks && text !== lab ? ' cnt' : ''}" data-act="approve" ${lab && ok ? '' : 'disabled'} title="${esc(marks && ok ? lab : why)}"><span class="long">${esc(text || (r.pile === 'ready' ? 'Ready' : why))}</span>${short ? '<span class="short">Approve</span>' : ''}<span class="kbd">a</span><small>Records only</small></button>
+      <button class="approve${r.pile === 'ready' ? ' done' : ''}${short ? ' sh' : ''}" data-act="approve" ${lab && ok ? '' : 'disabled'} title="${esc(marks && ok ? lab : why)}"><span class="long">${esc(text || (r.pile === 'ready' ? 'Ready' : why))}</span>${short ? '<span class="short">Approve</span>' : ''}<span class="kbd">a</span><small>Records only</small></button>
     </div></div>`;
 }
 function planLine(p) {
@@ -903,9 +914,7 @@ function measureAct() { const act = $('.act'); if (act) document.documentElement
 function paintApprove(it, r, u) {
   const btn = $('.act .approve'), lab = approveLabel(it, r, u);
   if (!btn || !lab) return;
-  const text = approveText(it, r, u);
-  btn.querySelector('.long').textContent = text;
-  btn.classList.toggle('cnt', showsPair(it, r, u) && text !== lab);
+  btn.querySelector('.long').textContent = lab;
   if (showsPair(it, r, u) && canApprove(it, r, u)) btn.title = lab;
   measureAct();
 }
@@ -979,7 +988,7 @@ const chip = (cls, row, html) => `<span class="mchip ${cls}" title="${esc(row.la
 // The card as it will be after approving, each change marked where it sits on the face.
 function markedFace(it, r, u, p, rows) {
   const row = k => rows.find(x => x.key === k), tRow = row('title'), eRow = row('est'), lRow = row('level'), cRow = row('col');
-  const a = afterChecks(it, p), was = nowChecks(r), next = { ...it, title: p.title }, ty = typeOf(next), tyNow = typeOf(it);
+  const a = afterChecks(it, p), next = { ...it, title: p.title }, ty = typeOf(next), tyNow = typeOf(it);
   const emo = leadEmoji(p.title), colNow = colName(it.col), sc = scoreOf(it);
   const cls = ['hs', 'marked', !p.close && a.met === 4 ? 'golden' : '', p.close ? 'dim' : '', r.playable ? 'playable' : '', tRow ? '' : 'keep-title', ty[0] === tyNow[0] && ty[1] === tyNow[1] ? 'keep-type' : ''].join(' ');
   const title = tRow && tRow.same && emo ? `<span class="emo">${T(emo)}</span> ${T(sansEmoji(p.title))}` : T(p.title);
@@ -992,7 +1001,7 @@ function markedFace(it, r, u, p, rows) {
       <div class="art"><svg viewBox="0 0 100 100" aria-hidden="true">${EMBLEM[ty[0]]}</svg></div>
       <div class="banner"><h2>${title}</h2></div>${tmark}
       <div class="fmeta">${STAGE && isPrivate(it.repo) ? '' : esc(it.id) + ' · '}${status}${it.deep ? ' · code checked' : ''}</div>
-      <div class="pips" aria-label="Ready after approving? ${p.close ? 'Closing' : `${a.met} of 4`}">${p.close ? '<b>Closing</b>' : pips(a, was)}</div>
+      <div class="pips" aria-label="Ready after approving? ${p.close ? 'Closing' : `${a.met} of 4`}">${p.close ? '<b>Closing</b>' : pips(a)}</div>
       <div class="rarity ${p.level ? 'met' : 'missing'}${lRow ? ' changed' : ''}" style="--r:${RCOL[p.level] || 'var(--well)'}" title="Priority: ${esc(p.level || 'none')}"></div>${sc ? scoreEl(sc, 'scn') : ''}
       <div class="textbox${extra.length ? ' rows' : ''}">${line}${extra.length ? `<div class="fc"><b>${esc(noteWins(r, u) ? 'Your note' : keyword(it, r))}</b><dl>${changeRows(extra)}</dl></div>` : ''}</div>
       <div class="plate">${esc(ty[1])}</div>
@@ -1009,10 +1018,9 @@ function markedFace(it, r, u, p, rows) {
 function marksBlock(it, r, u) {
   const p = projected(it, r, u), rows = changes(it, r, u, p), real = rows.filter(x => x.badge), n = real.length;
   const count = n ? `${n} ${n === 1 ? 'change' : 'changes'}` : p.pending ? 'Working out what changes' : 'Nothing changes';
-  const tags = real.map(x => `<span class="tag" title="${BADGE[x.badge][1]}"><i>${BADGE[x.badge][0]}</i>${esc(x.label)}</span>`).join('');
   const badge = x => x.badge ? `<dd class="bd"><span class="badge"><i>${BADGE[x.badge][0]}</i> ${BADGE[x.badge][1]}</span></dd>` : '';
   return `<div class="marks" id="marks">
-    <div class="strip"><b class="ta">${count}${n ? ':' : ''}</b><b class="tn">Now, before you approve</b><span class="tags">${tags}</span></div>
+    <div class="strip"><b class="tn">Now, before you approve</b></div>
     <div class="vw-a">${markedFace(it, r, u, p, rows)}</div><div class="vw-n">${face(it, r, true)}</div>
     <button class="peekbtn" type="button">Hold to see Now <span class="kbd">shift</span></button>
     <div class="mrows"><div class="mh"><b class="ta">${count}</b><b class="tn">Now, before you approve</b><span>Hold the card to see Now</span></div>
@@ -1023,13 +1031,6 @@ function marksBlock(it, r, u) {
 const hasChanges = (it, r, u) => r.pile === 'turn' && !!u && !!approveLabel(it, r, u);
 const noteWins = (r, u) => r.decisionOpen && !!(u.note || '').trim() && !['decide', 'split'].includes(r.kind);
 const changeCard = (it, r, u) => `<b>${esc(noteWins(r, u) ? 'Your note' : keyword(it, r))}</b><dl>${changeRows(changes(it, r, u))}</dl>`;
-// "Approve 4 changes" where the card marks its changes; the plain label otherwise, or while the preview is still on its way.
-function approveText(it, r, u) {
-  const lab = approveLabel(it, r, u);
-  if (!lab || !showsPair(it, r, u)) return lab;
-  const n = changes(it, r, u).filter(x => x.badge).length;
-  return n ? `Approve ${n} ${n === 1 ? 'change' : 'changes'}` : lab;
-}
 
 function parchment(it, r, u) {
   const [vtext, vcls] = verdict(it, r, u);

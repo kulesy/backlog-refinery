@@ -238,6 +238,10 @@ button.tile:hover{box-shadow:inset 0 0 0 2px var(--well),inset 0 0 0 3px var(--b
 .now{font-weight:600;font-size:16px;resize:none;overflow:hidden;line-height:1.4;display:block}
 .now.view,.box.view{white-space:pre-wrap;overflow-wrap:anywhere;min-height:0;background:oklch(0.955 0.02 85)}
 .box{font-size:16px;line-height:1.5;min-height:96px;resize:vertical}
+.rec{margin:10px 0 14px;padding:10px 12px;border-radius:6px;background:oklch(0.955 0.02 85);box-shadow:inset 0 0 0 1px var(--parch-edge)}
+.rec p{margin:4px 0 0;line-height:1.5}
+.yours{display:block}
+.yours .lab{margin-bottom:6px}
 .tabs{display:flex;gap:2px;align-items:flex-end}
 .tabs button{border:1px solid transparent;border-bottom:0;background:none;padding:6px 14px;border-radius:6px 6px 0 0;font-weight:600;font-size:13px;color:var(--ink-2)}
 .tabs button[aria-selected="true"]{background:var(--field);border-color:oklch(0.62 0.06 65);color:var(--ink)}
@@ -477,11 +481,9 @@ body.peek .vw-n{display:contents}
 .strip,.peekbtn,.mrows,.tmark,.mchip{display:none}
 .strip{flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;width:100%;font-size:14px;color:var(--on-table-2)}
 .strip b{font-weight:700;color:var(--on-table)}
-.strip .tn,body.peek .strip .ta,body.peek .strip .tags{display:none}
-body.peek .strip .tn{display:inline}
-.strip .tags{display:contents}
-.tag{display:inline-flex;gap:4px;align-items:center;padding:4px 8px;border-radius:999px;border:1px solid var(--glow);color:var(--glow);font-size:11px;font-weight:700;line-height:1;letter-spacing:.06em;text-transform:uppercase}
-.tag i,.mchip i,.badge i{font-style:normal;font-weight:800}
+.strip .tn{visibility:hidden}
+body.peek .strip .tn{visibility:visible}
+.mchip i,.badge i{font-style:normal;font-weight:800}
 .peekbtn{border:1px solid var(--brass-deep);background:var(--well);color:var(--on-table);border-radius:999px;padding:7px 14px;font-size:13.5px;font-weight:600;
   -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none}
 .peekbtn:hover{border-color:var(--brass)}
@@ -495,15 +497,12 @@ s.ew{text-decoration:none;opacity:.5}
 .tmark s.ew,.tmark s.ew~b{font-size:16px}
 .tmark b,.fmeta b,.mchip b{color:var(--glow);font-weight:700}
 .tmark span{margin-left:4px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--on-table-3)}
-.pip.gain{box-shadow:0 0 0 2px var(--glow)}
 .hs.golden .fmeta,.hs.golden .tmark{color:var(--well)}
 .hs.golden .fmeta s,.hs.golden .tmark s,.hs.golden .pips s{color:oklch(0.38 0.05 60);text-decoration-color:var(--red-ink)}
 .hs.golden .fmeta b,.hs.golden .tmark b{color:oklch(0.34 0.14 150)}
 .hs.golden .tmark span{color:oklch(0.38 0.05 60)}
 .hs.golden .pips b{color:var(--well)}
 .hs.golden .pip{color:var(--well);border-color:oklch(0.42 0.06 65)}
-.hs.golden .pip.gain{border-color:var(--glow-deep);box-shadow:0 0 0 2px var(--glow-deep)}
-.pip.gain::before{content:"+ "}
 .gw{position:absolute;left:0;top:0;width:0;height:0}
 .gw.changed{filter:drop-shadow(0 0 5px var(--glow)) drop-shadow(0 0 2px var(--glow))}
 .gw.changed .mana-rim{background:linear-gradient(var(--glow),var(--glow-deep))}
@@ -552,7 +551,6 @@ body.stage .fc dd{font-size:18px}
 body.stage .fc dt,body.stage .fc>b{font-size:14px}
 body.stage .pip,body.stage .fmeta{font-size:15px}
 body.stage .strip{font-size:17px}
-body.stage .tag{font-size:13px}
 body.stage .mchip{font-size:14px}
 body.stage.cv .hs .tmark{font-size:15px}
 body.stage .peekbtn{font-size:16px}
@@ -623,8 +621,6 @@ body.stage.cv .hs .banner h2{font-size:20px}
   .act .kbd{display:none}
   .act .approve{padding:7px 10px 6px;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .approve.sh .long{display:none}.approve.sh .short{display:inline}
-  .act .approve.cnt{padding:6px 8px;font-size:15px;line-height:1.05;white-space:normal;text-wrap:balance}
-  .approve.cnt small{display:none}
   body.peek .mrows dl,body.peek .mdet{display:none}
   body.typing .act{display:none}
   .kbd{display:none}
@@ -644,7 +640,7 @@ body.stage.cv .hs .banner h2{font-size:20px}
 body.stage{font-size:20px}
 body.stage .piles .pile.coll,body.stage .piles .pile.scorechip,body.stage .piles .pile.draft,body.stage .upnext{display:none}
 body.stage .verdict{font-size:20px}
-body.stage .rb,body.stage .now,body.stage .box{font-size:19px}
+body.stage .rb,body.stage .now,body.stage .box,body.stage .rec p{font-size:19px}
 body.stage .hint,body.stage .rh .sub,body.stage .rh .st,body.stage .ph .meta,body.stage .will,body.stage .op .why{font-size:18px}
 body.stage .ph h1{font-size:32px}
 body.stage .rh h3{font-size:18px}
