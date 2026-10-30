@@ -24,10 +24,6 @@
 
 Figure: a 1:52 introduction video, from one card and its four checks through End turn to running the demo
 
-<img alt="Backlog Refinery showing a card in the demo, with its three proposed changes beside it and the next cards on the right." src="docs/media/hero.png">
-
-Figure: a card from the demo, with the proposed title, body and effort changes beside it
-
 Backlog Refinery shows one card for each backlog item on your GitHub Projects v2 board. Each card answers one question: is it ready? The four checks are Detail (acceptance criteria), Priority, Effort (the board's estimate) and Approved (your click). Under every check that is not met sits a recommended update, ready to edit. You approve or skip, and move on. The checks follow SSW's Definition of Ready.
 
 The app never writes to GitHub. Your decisions are saved to a data folder, and a Claude Code session or a script of your own applies them.
